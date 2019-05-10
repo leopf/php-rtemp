@@ -19,6 +19,7 @@ abstract class RTExtension {
     protected abstract function listProps();
 }
 
+
 $ext_objects = array();
 
 function ext_exec_before(DocBuilder $docBuilder) {

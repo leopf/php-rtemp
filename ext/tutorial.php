@@ -17,7 +17,6 @@ class TutorialExtension extends RTExtension
     }
 
     protected function listProps() {
-        echo "init tut";
         return array("title");
     }
 }

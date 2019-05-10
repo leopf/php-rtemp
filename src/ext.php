@@ -5,7 +5,7 @@ abstract class RTExtension {
     private $props;
 
     public function init() {
-        $this->props = $this->listProps();
+        $this->props = $this->listProps() | array();
     }
 
     public abstract function before(DocBuilder $docBuilder);
@@ -50,7 +50,6 @@ function ext_init() {
     global $ext_objects;
 
     foreach (glob(__DIR__."/../ext/*.php") as $filename) {
-        echo $filename;
         include $filename;
     }
     foreach ($ext_objects as $extObj) {

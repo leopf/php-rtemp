@@ -1,17 +1,27 @@
 <?php
 
-function ext_tutorial_header()
+class TutorialExtension extends RTExtension
 {
-    doc_body_add("<div style=\"position:fixed;top:0;left:0;width:100%;height:4rem;line-height:4rem;padding-left:2rem;background-color:lightgray;\">My Default Header</div>");
-    doc_body_add("<div style=\"height: 4rem;\"></div>");
-}
-function ext_tutorial_p_title($value)
-{
-    doc_head_add("<meta name=\"title\" content=\"{$value}\"/>");
-    doc_head_add("<title>{$value}</title>");
+    public function before(DocBuilder $docBuilder) {
+        $docBuilder->addBody("<div style=\"position:fixed;top:0;left:0;width:100%;height:4rem;line-height:4rem;padding-left:2rem;background-color:lightgray;\">My Default Header</div>");
+        $docBuilder->addBody("<div style=\"height: 4rem;\"></div>");
+    }
+    public function after(DocBuilder $docBuilder) {
+
+    }
+    public function applyProp(String $name, String $value, DocBuilder $docBuilder) {
+        if ($name == "title") {
+            $docBuilder->addHead("<meta name=\"title\" content=\"{$value}\"/>");
+            $docBuilder->addHead("<title>{$value}</title>");
+        }
+    }
+
+    protected function listProps() {
+        echo "init tut";
+        return array("title");
+    }
 }
 
-doc_handler_prop_reg("ext_tutorial_p_title", "title");
-doc_handler_event_reg("ext_tutorial_header", "before");
+ext_reg(new TutorialExtension());
 
 ?>

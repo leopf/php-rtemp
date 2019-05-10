@@ -2,10 +2,9 @@
 
 include "src/route.php";
 include "src/doc.php";
+include "src/ext.php";
 
-foreach (glob("ext/*.php") as $filename) {
-    include $filename;
-}
+ext_init();
 
 $filepath = route_get_path();
 

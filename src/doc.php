@@ -1,56 +1,55 @@
 <?php
 
-$doc_head = "";
-$doc_body = "";
+class DocBuilder
+{   
+    private $head;
+    private $body;
 
-$doc_handlers_prop = array();
-$doc_handlers_events = array(
-    "before" => array(),
-    "after" => array()
-);
+    public function addHead($value)
+    {
+        $this->head = $this->head.$value;
+    }
+    public function addBody($value)
+    {
+        $this->body = $this->body.$value;
+    }
 
-function doc_exec_event($type) 
-{
-    global $doc_handlers_events;
-    foreach ($doc_handlers_events[$type] as $funcName) {
-        call_user_func($funcName);
+    public function createHeadElement(DOMDocument $doc)
+    {
+        if ($this->head) {
+            $frag = $doc->createDocumentFragment();
+            $frag->appendXML($this->head);
+            return $frag;
+        }
+    }
+    public function createBodyElement(DOMDocument $doc)
+    {
+        if ($this->body) {
+            $frag = $doc->createDocumentFragment();
+            $frag->appendXML($this->body);
+            return $frag;
+        }
+    }
+
+    public function clear()
+    {
+        $this->body = "";
+        $this->head = "";
     }
 }
 
-function doc_handler_prop_reg($funcName, $propName)
-{
-    global $doc_handlers_prop;
-    $doc_handlers_prop[$propName] = $funcName;
-}
-function doc_handler_event_reg($funcName, $type)
-{
-    global $doc_handlers_events;
-    $doc_handlers_events[$type][] = $funcName;
-}
+$docBuilder = new DocBuilder();
 
 function doc_prop_set($name, $value) 
 {
-    global $doc_handlers_prop;
-
-    if ($doc_handlers_prop[$name]) {
-        call_user_func($doc_handlers_prop[$name], $value);
-    }
+    global $docBuilder;
+    ext_apply_prop($name, $value, $docBuilder);
 }
 
-function doc_head_add($value)
-{
-    global $doc_head;
-    $doc_head = $doc_head.$value;
-}
-function doc_body_add($value)
-{
-    global $doc_body;
-    $doc_body = $doc_body.$value;
-}
 
 function doc_render($filename)
 {
-    global $doc_body, $doc_config, $doc_head;
+    global $docBuilder, $doc_config;
 
     ob_start();
 
@@ -65,43 +64,34 @@ function doc_render($filename)
     $doc_el_head = $doc->getElementsByTagName("head")->item(0);
     $doc_el_body = $doc->getElementsByTagName("body")->item(0);
 
-    doc_exec_event("before");
+    ext_exec_before($docBuilder);
 
-    if ($doc_body) {
-        $doc_frag_before_body = $doc->createDocumentFragment();
-        $doc_frag_before_body->appendXML($doc_body);
+    if ($append_element = $docBuilder->createBodyElement($doc)) {
         if ($doc_el_body->firstChild) {
-            $doc_el_body->insertBefore($doc_frag_before_body, $doc_el_body->firstChild);
+            $doc_el_body->insertBefore($append_element, $doc_el_body->firstChild);
         }
         else {
-            $doc_el_body->appendChild($doc_frag_before_body);
+            $doc_el_body->appendChild($append_element);
         }
-        $doc_body = "";
     }
-
-    if ($doc_head) {
-        $doc_frag_before_head = $doc->createDocumentFragment();
-        $doc_frag_before_head->appendXML($doc_head);
+    if ($append_element = $docBuilder->createHeadElement($doc)) {
         if ($doc_el_head->firstChild) {
-            $doc_el_head->insertBefore($doc_frag_before_head, $doc_el_head->firstChild);
+            $doc_el_head->insertBefore($append_element, $doc_el_head->firstChild);
         }
         else {
-            $doc_el_head->appendChild($doc_frag_before_head);
+            $doc_el_head->appendChild($append_element);
         }
-        $doc_head = "";
     }
-    
-    doc_exec_event("after");
 
-    if ($doc_body) {
-        $doc_frag_before_body = $doc->createDocumentFragment();
-        $doc_frag_before_body->appendXML($doc_body);
-        $doc_el_head->appendChild($doc_frag_before_body);
+    $docBuilder->clear();
+    
+    ext_exec_after($docBuilder);
+
+    if ($append_element = $docBuilder->createBodyElement($doc)) {
+        $doc_el_body->appendChild($append_element);
     }
-    if ($doc_head) {
-        $doc_frag_before_head = $doc->createDocumentFragment();
-        $doc_frag_before_head->appendXML($doc_head);
-        $doc_el_head->appendChild($doc_frag_before_head);
+    if ($append_element = $docBuilder->createHeadElement($doc)) {
+        $doc_el_head->appendChild($append_element);
     }
 
     echo $doc->saveHTML();

@@ -10,7 +10,7 @@ The following code is an example extension located under ```ext/tutorial.php```
 ```php
 class TutorialExtension extends RTExtension
 {
-    public function Init(ExtensionHandler $handler)
+    public function init(ExtensionHandler $handler)
     {
         //register property
         $handler->registerProp("title", $this);

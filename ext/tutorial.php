@@ -2,7 +2,7 @@
 
 class TutorialExtension extends RTExtension
 {
-    public function Init(ExtensionHandler $handler)
+    public function init(ExtensionHandler $handler)
     {
         $handler->registerProp("title", $this);
         $handler->registerPropElement("tpl-title", "title");

@@ -60,7 +60,7 @@ function doc_apply_prop($doc)
 }
 function doc_render($filename)
 {
-    global $docBuilder, $doc_config;
+    global $docBuilder, $config;
 
     ob_start();
 
@@ -72,7 +72,9 @@ function doc_render($filename)
     $doc = new DOMDocument();
     $doc->loadHTML($doc_html);
 
-    doc_apply_prop($doc);
+    if ($config["allowCustomElements"]) {
+        doc_apply_prop($doc);
+    }
 
     $doc_el_head = $doc->getElementsByTagName("head")->item(0);
     $doc_el_body = $doc->getElementsByTagName("body")->item(0);
@@ -105,6 +107,10 @@ function doc_render($filename)
     }
     if ($append_element = $docBuilder->createHeadElement($doc)) {
         $doc_el_head->appendChild($append_element);
+    }
+
+    if ($config["formatOutput"]) {
+        $doc->formatOutput = true;
     }
 
     echo $doc->saveHTML();

@@ -2,6 +2,15 @@
 
 $route_html_files = array("php", "htm", "html");
 
+function route_content_type()
+{
+    $accept_type = getallheaders()["Accept"];
+    $accept_type = explode(",", $accept_type)[0];
+
+    if ($accept_type) {
+        header('Content-Type: '.$accept_type);
+    }
+}
 function route_get_filename($url) {
     return "site/".$url;
 }

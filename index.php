@@ -13,7 +13,7 @@ if ($filepath_info["found"]) {
         doc_render($filepath_info["path"]);
     }
     else {
-        //TODO Map content types to file extension and accept type
+        route_content_type();
         include $filepath_info["path"];
     }
 }

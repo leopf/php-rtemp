@@ -5,7 +5,7 @@ abstract class RTExtension {
     private $props;
 
     public function init() {
-        $this->props = $this->listProps() | array();
+        $this->props = $this->listProps();
     }
 
     public abstract function before(DocBuilder $docBuilder);

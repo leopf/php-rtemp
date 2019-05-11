@@ -6,10 +6,16 @@ include "src/ext.php";
 
 ext_init();
 
-$filepath = route_get_path();
+$filepath_info = route_get_path();
 
-if (file_exists($filepath)) {
-    doc_render($filepath);
+if ($filepath_info["found"]) {
+    if ($filepath_info["isHtml"]) {
+        doc_render($filepath_info["path"]);
+    }
+    else {
+        //TODO Map content types to file extension and accept type
+        include $filepath_info["path"];
+    }
 }
 else {
     header("HTTP/1.0 404 Not Found");

@@ -5,6 +5,8 @@ Don't worry about any standards you have to implement, just write your HTML and 
 ## Extension
 An Extension can have all the methods shown in the example. The Methods ```before``` and ```after``` are executed to place HTML before and after the document head and body. The apply property method is called, when a property with a specific value is received. This will only happen, if registered in the ```init``` function. In addition property elements can be defined, which are bound to a property name. The conents of a property element is used as te properties value.
 
+The following code is an example extension located under ```ext/tutorial.php```
+
 ```php
 class TutorialExtension extends RTExtension
 {

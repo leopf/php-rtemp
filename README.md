@@ -45,8 +45,10 @@ with this extension the ```tutorial.html``` document was converted from this:
     <tpl-title>Hello</tpl-title>
 </head>
 <body>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis rerum minima quas quos tempora sunt, qui ab dolores cumque aliquam autem blanditiis neque laborum error veritatis dignissimos necessitatibus recusandae quam.
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam facere impedit deserunt reiciendis, delectus ex repellendus nostrum voluptas animi veniam quam fugiat itaque qui eum veritatis blanditiis nobis unde quos.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+    Nobis rerum minima quas quos tempora sunt, qui ab dolores cumque aliquam autem blanditiis neque laborum error veritatis dignissimos necessitatibus recusandae quam.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+    Quibusdam facere impedit deserunt reiciendis, delectus ex repellendus nostrum voluptas animi veniam quam fugiat itaque qui eum veritatis blanditiis nobis unde quos.
 </body>
 </html>
 ```

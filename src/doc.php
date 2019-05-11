@@ -46,7 +46,18 @@ function doc_prop_set($name, $value)
     ext_apply_prop($name, $value, $docBuilder);
 }
 
+function doc_apply_prop($doc)
+{
+    global $extensionHandler;
 
+    foreach ($extensionHandler->listPropElements() as $elName => $propName) {
+        $el = $doc->getElementsByTagName($elName)->item(0);
+        if ($el) {
+            doc_prop_set($propName, $el->nodeValue);
+            $el->parentNode->removeChild($el);
+        }
+    } 
+}
 function doc_render($filename)
 {
     global $docBuilder, $doc_config;
@@ -60,6 +71,8 @@ function doc_render($filename)
 
     $doc = new DOMDocument();
     $doc->loadHTML($doc_html);
+
+    doc_apply_prop($doc);
 
     $doc_el_head = $doc->getElementsByTagName("head")->item(0);
     $doc_el_body = $doc->getElementsByTagName("body")->item(0);

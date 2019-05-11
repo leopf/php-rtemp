@@ -4,6 +4,7 @@ include "src/route.php";
 include "src/doc.php";
 include "src/ext.php";
 
+error_reporting(0);
 ext_init();
 
 $filepath_info = route_get_path();
